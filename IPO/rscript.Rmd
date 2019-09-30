@@ -1,0 +1,101 @@
+---
+title: "Data_manipulation"
+author: "Xinyao Wu"
+date: "9/24/2019"
+output: pdf_document
+---
+
+As part of our underwriting for  IPO deals in 2019, it is important for us to asses previous data. For this project we  compiled a list of 2018 IPO's listed in the US and China. The project at hand is to create visualization  charts to for analysis and insights for report which will identify trends or correlative theories that may be taken into consideration based on the Data Provided.   
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+getOption("digits")
+library(readr)
+library(tidyverse)
+```
+
+#China 
+```{r}
+china = readxl::read_xlsx("2018 IPO in China & US(final).xlsx",sheet = 1)
+colnames(china) = china[1,]
+china = china[-1,]
+```
+
+#US
+```{r}
+us = readxl::read_xlsx("2018 IPO in China & US(final).xlsx",sheet = 2)
+colnames(us) = us[1,]
+us = us[-1,]
+```
+
+##Chart 1 Industries - US - China + Combined
+```{r}
+industry.ch = china%>% group_by(Industry) %>% summarise(n = n())
+#  ch.indu = ggplot(industry.ch, aes(x = "",y = n, fill = Industry))+geom_bar(width = 1, stat = "identity")
+#  ch.indu+coord_polar("y", start=0)
+# write.csv(industry.ch,"sort data/industry_ch.csv")
+#  
+ industry.us = us %>% group_by(Industry) %>% summarise(n = n())
+# us.indu = ggplot(industry.us, aes(x = "",y = n, fill = Industry))+geom_bar(width = 1, stat = "identity")
+# us.indu+coord_polar("y", start=0)
+write.csv(industry.us,"sort data/industry_us.csv")
+
+com.indu = union_all(china[2],us[2]) %>% group_by(Industry) %>% summarise(n = n())
+write.csv(com.indu,"sort data/industry_com.csv")
+```
+
+##Chart 2 IPO Prices - China - US
+
+```{r}
+china %>%distinct(Date)
+```
+
+##Chart 3  - Investment Bank Underwriters - Combined
+```{r}
+un.writer = union_all(china$`Lead Underwriter`,us$`Lead Underwriter`)
+a= data.frame(x = unlist(strsplit(un.writer,",")) %>% str_to_upper())  %>% drop_na() 
+
+x = unlist(strsplit(un.writer,",")) %>% as.character()  %>% str_to_upper()
+# d =NA
+# for (i in 1 :1000){
+#   d[i] = gsub("^[[:blank:]]", "",x[[i]])
+#   d[i] = gsub("[\r\n|\n]", "",x[[i]])
+# }
+
+a = data.frame(x)
+write.csv(a,"sort data/waitpython.csv",row.names = FALSE)
+
+count(a,d)
+
+c = strsplit(un.writer,",") 
+gsub("^[[:blank:]]", "",c)
+
+count(b,new) 
+
+```
+
+
+##Chart 4 - Exchanges - Combined
+
+##Chart 5 - Locations of Business- Combined
+
+##Chart 6  - P/E Ratio - China
+
+##Chart 7 - Market Capitalization -  U.S. - China
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
